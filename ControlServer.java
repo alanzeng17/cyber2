@@ -153,115 +153,108 @@ class PoleServer_handler implements Runnable {
     // independently. The interface needs to be changed if the control of one
     // pendulum needs sensing data from other pendulums.
     double calculate_action(double angle, double angleDot, double pos, double posDot) {
-      double action = 0;
-       //if (angle > 0 && angleDiff < 0) {
-       if (angle > 0) {
-           if (angle > 65 * 0.01745) {
-               action = 9;
-           } else if (angle > 60 * 0.01745) {
-               action = 7;
-           } else if (angle > 50 * 0.01745) {
-               action = 6;
-           } else if (angle > 30 * 0.01745) {
-               action = 4;
-           } else if (angle > 20 * 0.01745) {
-               action = 2;
-           } else if (angle > 10 * 0.01745) {
-               action = 0.5;
-           } else if(angle >5*0.01745){
-               action = 0.2;
-           } else if(angle >2*0.01745){
-               action = 0.1;
-           } else {
-               action = 0.05;
-           }
-       } else if (angle < 0) {
-           if (angle < -65 * 0.01745) {
-               action = -9;
-           } else if (angle < -60 * 0.01745) {
-               action = -7;
-           } else if (angle < -50 * 0.01745) {
-               action = -6;
-           } else if (angle < -30 * 0.01745) {
-               action = -4;
-           } else if (angle < -20 * 0.01745) {
-               action = -2;
-           } else if (angle < -10 * 0.01745) {
-               action = -0.5;
-           } else if(angle <-5*0.01745){
-               action = -0.2;
-           } else if(angle <-2*0.01745){
-               action = -0.1;
-           } else {
-               action = -0.05;
-           } 
-        } else {
-            action = 0;
-        }
-        if (angleDot > 0) {
-            if (angleDot > 65 * 0.01745) {
-                action += 5;
-            } else if (angleDot > 60 * 0.01745) {
-                action += 4;
-            } else if (angleDot > 50 * 0.01745) {
-                action += 3;
-            } else if (angleDot > 30 * 0.01745) {
-                action += 2;
-            } else if (angleDot > 20 * 0.01745) {
-                action += 1;
-            } else if (angleDot > 10 * 0.01745) {
-                action += 0.5;
-            } else if(angleDot > 5*0.01745){
-                action += 0.2;
-            } else if(angleDot > 2*0.01745){
-                action += 0.1;
-            } else {
-                action += 0.01;
-            } 
-        } else if (angleDot < 0) {
-            if (angleDot < -65 * 0.01745) {
-                action += -5;
-            } else if (angleDot < -60 * 0.01745) {
-                action += -4;
-            } else if (angleDot < -50 * 0.01745) {
-                action += -3;
-            } else if (angleDot < -30 * 0.01745) {
-                action += -2;
-            } else if (angleDot < -20 * 0.01745) {
-                action += -1;
-            } else if (angleDot < -10 * 0.01745) {
-                action += -0.5;
-            } else if(angleDot <-5*0.01745){
-                action += -0.2;
-            } else if(angleDot <-2*0.01745){
-                action += -0.1;
-            } else {
-                action += -0.01;
-            } 
-        } else {
-           action = 0;
-       }
-       if (posDot < 0) {
-           if (posDot < -0.5) {
-               action += 0.2;
-           }
-       } else if (posDot > 0) {
-           if (posDot > 0.5) {
-               action += -0.2;
-           }
-       }
-       if (pos < 0){
-           if (pos < -3) {
-               action += .5;
-           }
-       } else if (pos > 0) {
-            if (pos > 3) {
-                action += -.5;
-            }
-
-       }
-       return action;
-   }
+        double action = 0;
+         //if (angle > 0 && angleDiff < 0) {
+         if (angle > 0) {
+             if (angle > 65 * 0.01745) {
+                 action = 9;
+             } else if (angle > 60 * 0.01745) {
+                 action = 7;
+             } else if (angle > 50 * 0.01745) {
+                 action = 6;
+             } else if (angle > 30 * 0.01745) {
+                 action = 4;
+             } else if (angle > 20 * 0.01745) {
+                 action = 2;
+             } else if (angle > 10 * 0.01745) {
+                 action = 0.5;
+             } else if(angle >5*0.01745){
+                 action = 0.2;
+             } else if(angle >2*0.01745){
+                 action = 0.1;
+             } else {
+                 action = 0.05;
+             }
+         } else if (angle < 0) {
+             if (angle < -65 * 0.01745) {
+                 action = -10;
+             } else if (angle < -60 * 0.01745) {
+                 action = -8;
+             } else if (angle < -50 * 0.01745) {
+                 action = -8;
+             } else if (angle < -30 * 0.01745) {
+                 action = -8;
+             } else if (angle < -20 * 0.01745) {
+                 action = -8;
+             } else if (angle < -10 * 0.01745) {
+                 action = -0;
+             } else if(angle <-5*0.01745){
+                 action = -0.1;
+             } else if(angle <-2*0.01745){
+                 action = -0.1;
+             } else {
+                 action = -0.1;
+             } 
+          } else {
+              action = 0;
+          }
+          if (angleDot > 0) {
+              if (angleDot > 65 * 0.01745) {
+                  action += 5;
+              } else if (angleDot > 60 * 0.01745) {
+                  action += 4;
+              } else if (angleDot > 50 * 0.01745) {
+                  action += 3;
+              } else if (angleDot > 30 * 0.01745) {
+                  action += 2;
+              } else if (angleDot > 20 * 0.01745) {
+                  action += 1;
+              } else if (angleDot > 10 * 0.01745) {
+                  action += 0.5;
+              } else if(angleDot > 5*0.01745){
+                  action += 0.2;
+              } else if(angleDot > 2*0.01745){
+                  action += 0.1;
+              } else {
+                  action += 0.01;
+              } 
+          } else if (angleDot < 0) {
+              if (angleDot < -65 * 0.01745) {
+                  action += -5;
+              } else if (angleDot < -60 * 0.01745) {
+                  action += -5;
+              } else if (angleDot < -50 * 0.01745) {
+                  action += -4;
+              } else if (angleDot < -30 * 0.01745) {
+                  action += -3;
+              } else if (angleDot < -20 * 0.01745) {
+                  action += -2;
+              } else if (angleDot < -10 * 0.01745) {
+                  action += -1;
+              } else if(angleDot <-5*0.01745){
+                  action += -0.4;
+              } else if(angleDot <-2*0.01745){
+                  action += -0.25;
+              } else {
+                  action += -0.1;
+              } 
+          } else {
+             action = 0;
+         }
+         if (posDot < 0) {
+             if (posDot < -0.5) {
+                 action += 0.2;
+             }
+         } else if (posDot > 0) {
+             if (posDot > 0.5) {
+                 action += -0.2;
+             }
+         }
+         if (pos < 2 && angle >= 0)
+            action += 7;
+         return action;
+     }
+  
 
     /**
      * This method sends the Double message on the object output stream.
