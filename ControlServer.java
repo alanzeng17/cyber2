@@ -200,15 +200,15 @@ class PoleServer_handler implements Runnable {
         }
         if (angleDot > 0) {
             if (angleDot > 65 * 0.01745) {
-                action += 5;
+                action += 9;
             } else if (angleDot > 60 * 0.01745) {
-                action += 4;
+                action += 8;
             } else if (angleDot > 50 * 0.01745) {
-                action += 3;
+                action += 7;
             } else if (angleDot > 30 * 0.01745) {
-                action += 2;
+                action += 6;
             } else if (angleDot > 20 * 0.01745) {
-                action += 1;
+                action += 5;
             } else if (angleDot > 10 * 0.01745) {
                 action += 0.5;
             } else if(angleDot > 5*0.01745){
@@ -220,27 +220,28 @@ class PoleServer_handler implements Runnable {
             } 
         } else if (angleDot < 0) {
             if (angleDot < -65 * 0.01745) {
-                action += -5;
+                action += -9;
             } else if (angleDot < -60 * 0.01745) {
-                action += -4;
+                action += -8;
             } else if (angleDot < -50 * 0.01745) {
-                action += -3;
+                action += -7;
             } else if (angleDot < -30 * 0.01745) {
-                action += -2;
+                action += -6;
             } else if (angleDot < -20 * 0.01745) {
-                action += -1;
+                action += -5;
             } else if (angleDot < -10 * 0.01745) {
                 action += -0.5;
             } else if(angleDot <-5*0.01745){
                 action += -0.2;
             } else if(angleDot <-2*0.01745){
-                action += -0.1;
+              action += -0.1;
             } else {
-                action += -0.01;
+		          action += -0.01;
             } 
         } else {
            action = 0;
        }
+	//posDot = velocity
        if (posDot < 0) {
            if (posDot < -0.5) {
                action += 0.2;
@@ -250,10 +251,10 @@ class PoleServer_handler implements Runnable {
                action += -0.2;
            }
        }
-       if (pos < 0){
-           if (pos < -3) {
+       if (pos < 2){
+           //if (pos < -3) {
                action += .5;
-           }
+           //}
        } else if (pos > 0) {
             if (pos > 3) {
                 action += -.5;
