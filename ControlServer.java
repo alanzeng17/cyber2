@@ -249,12 +249,12 @@ class PoleServer_handler implements Runnable {
              if (posDot > 0.5) {
                  action += -0.2;
              }
-         }
+         
          if (pos < 2 && angle >= 0)
             action += 7;
          return action;
      }
-  
+   }
 
     /**
      * This method sends the Double message on the object output stream.
