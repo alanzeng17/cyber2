@@ -250,16 +250,6 @@ class PoleServer_handler implements Runnable {
                action += -0.2;
            }
        }
-       if (pos < 0){
-           if (pos < -3) {
-               action += .5;
-           }
-       } else if (pos > 0) {
-            if (pos > 3) {
-                action += -.5;
-            }
-
-       }
        return action;
    }
 
