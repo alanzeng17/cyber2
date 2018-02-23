@@ -180,7 +180,7 @@ class PoleServer_handler implements Runnable {
              }
          } else if (angle < 0) {
              if (angle < -65 * 0.01745) {
-                 action = -10;
+                 action = -7;
              } else if (angle < -60 * 0.01745) {
                  action = -6;
              } else if (angle < -50 * 0.01745) {
@@ -225,9 +225,9 @@ class PoleServer_handler implements Runnable {
               if (angleDot < -65 * 0.01745) {
                   action += -9;
               } else if (angleDot < -60 * 0.01745) {
-                  action += -5;
+                  action += -3;
               } else if (angleDot < -50 * 0.01745) {
-                  action += -4;
+                  action += -3;
               } else if (angleDot < -30 * 0.01745) {
                   action += -3;
               } else if (angleDot < -20 * 0.01745) {
