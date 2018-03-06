@@ -36,7 +36,7 @@ public class ControlServer {
  */
 class PoleServer_handler implements Runnable {
     // Set the number of poles
-    private static final int NUM_POLES = 2;
+    private static final int NUM_POLES = 1;
 
     static ServerSocket providerSocket;
     Socket connection = null;
@@ -45,14 +45,11 @@ class PoleServer_handler implements Runnable {
     String message = "abc";
     static Socket clientSocket;
     Thread t;
-    boolean hit;
     int start_pos = -2;
     boolean alt = false;
     boolean stopped = false;
     boolean once = false;
     int count = 0;
-    int ts = 0;
-    double follow = 0;
 
     /**
      * Class Constructor
@@ -116,9 +113,9 @@ class PoleServer_handler implements Runnable {
                   System.out.println("server < pole["+i+"]: Angle:"+angle+"  AngleDot:"
                       +angleDot+"  Pos:"+pos+"  PosDot:"+posDot);
                   if (i == 0)
-                    actions[i] = calculate_action(angle, angleDot, pos, posDot, ts);
+                    actions[i] = calculate_action(angle, angleDot, pos, posDot);
                   else
-                    actions[i] = calculate_action(angle, angleDot, pos, posDot, data[2]);
+                    actions[i] = calculate_action(angle, angleDot, pos, posDot);
                 }
 
                 sendMessage_doubleArray(actions);
@@ -160,50 +157,104 @@ class PoleServer_handler implements Runnable {
         }
 
     }
-
-    double calculate_action(double angle, double angleDot, double pos, double posDot, double target_pos) {
-        /*double action = 0;
-        double a = .5;
-        double b = .75;
-      double c = 0;
-        double d = .25;
-      double angleCheck;
-      action = (angle*a+angleDot*b+pos*c+posDot*d)*5;
-      //double angleCheck = 0.01745;
-      // if(hit || Math.abs(pos - finalPos) < .05) {
-      //   angleCheck = 7 * 0.01745;
-      //   System.out.print("HELLO");
-      //   hit = true;
-      // }
-      // else
-      //   angleCheck = 0.01745;
-      if(Math.abs(finalPos - pos) < 0.2)
-          hit = true;  
-      if (Math.abs(angle) < 1 * 0.01745) {
-        if(pos < finalPos && posDot > 0) {
-          if(hit)
-            action = 0;
-          else
-            action = -0.015;
-        }
-        if(pos > finalPos && posDot < 0) {
-          if(hit)
-            action = 0;
-          else
-            action = 0.015;
-        }
-      }
-
-      return action;*/
+    double calculate_action(double angle, double angleDot, double pos, double posDot) {
+        double action = 0;
+         //if (angle > 0 && angleDiff < 0) {
+         if (angle > 0) {
+             if (angle > 65 * 0.01745) {
+                 action = 9;
+             } else if (angle > 60 * 0.01745) {
+                 action = 7;
+             } else if (angle > 50 * 0.01745) {
+                 action = 6;
+             } else if (angle > 30 * 0.01745) {
+                 action = 4;
+             } else if (angle > 20 * 0.01745) {
+                 action = 2;
+             } else if (angle > 10 * 0.01745) {
+                 action = 0.5;
+             } else if(angle >5*0.01745){
+                 action = 0.2;
+             } else if(angle >2*0.01745){
+                 action = 0.1;
+             } else {
+                 action = 0.05;
+             }
+         } else if (angle < 0) {
+             if (angle < -65 * 0.01745) {
+                 action = -9;
+             } else if (angle < -60 * 0.01745) {
+                 action = -7;
+             } else if (angle < -50 * 0.01745) {
+                 action = -6;
+             } else if (angle < -30 * 0.01745) {
+                 action = -4;
+             } else if (angle < -20 * 0.01745) {
+                 action = -2;
+             } else if (angle < -10 * 0.01745) {
+                 action = -0.5;
+             } else if(angle <-5*0.01745){
+                 action = -0.2;
+             } else if(angle <-2*0.01745){
+                 action = -0.1;
+             } else {
+                 action = -0.05;
+             } 
+          } else {
+              action = 0;
+          }
+          if (angleDot > 0) {
+              if (angleDot > 65 * 0.01745) {
+                  action += 5;
+              } else if (angleDot > 60 * 0.01745) {
+                  action += 4;
+              } else if (angleDot > 50 * 0.01745) {
+                  action += 3;
+              } else if (angleDot > 30 * 0.01745) {
+                  action += 2;
+              } else if (angleDot > 20 * 0.01745) {
+                  action += .5;
+              } else if (angleDot > 10 * 0.01745) {
+                  action += 0.25;
+              } else if(angleDot > 5*0.01745){
+                  action += 0.1;
+              } else if(angleDot > 2*0.01745){
+                  action += 0.05;
+              } else {
+                  action += 0;
+              } 
+          } else if (angleDot < 0) {
+              if (angleDot < -65 * 0.01745) {
+                  action += -5;
+              } else if (angleDot < -60 * 0.01745) {
+                  action += -4;
+              } else if (angleDot < -50 * 0.01745) {
+                  action += -3;
+              } else if (angleDot < -30 * 0.01745) {
+                  action += -2;
+              } else if (angleDot < -20 * 0.01745) {
+                  action += -.5;
+              } else if (angleDot < -10 * 0.01745) {
+                  action += -0.25;
+              } else if(angleDot <-5*0.01745){
+                  action += -0.1;
+              } else if(angleDot <-2*0.01745){
+                  action += -0.05;
+              } else {
+                  action += 0;
+              } 
+          } else {
+             action = 0;
+         }
+         return action;
+     }
+    double calculate_action2(double angle, double angleDot, double pos, double posDot, double target_pos) {
         double action = 0;
         //double target_pos = 2; // change this for cart 2
         double mid = (start_pos + target_pos)/4;
         double dist = target_pos - start_pos;
         if (pos < mid) {
             action -= 0.09;
-        }
-        if (target_pos != ts && target_pos - pos < 0.8) {
-            action -= .1;
         }
         if (pos >= start_pos + (dist * .97)){
             System.out.println("Stablization activate");
@@ -484,8 +535,262 @@ class PoleServer_handler implements Runnable {
          }
         return action;
     }
+    // Calculate the actions to be applied to the inverted pendulum from the
+    // sensing data.
+    // TODO: Current implementation assumes that each pole is controlled
+    // independently. The interface needs to be changed if the control of one
+    // pendulum needs sensing data from other pendulums.
+    /*double calculate_action(double angle, double angleDot, double pos, double posDot) {
+        double action = 0;
+        boolean first_iteration = true;
+        boolean hit_pos = false;
+         //if (angle > 0 && angleDiff < 0) {
+         if (angle > 0) {
+             if (angle > 65 * 0.01745) {
+                 action = 9;
+             } else if (angle > 60 * 0.01745) {
+                 action = 7;
+             } else if (angle > 50 * 0.01745) {
+                 action = 6;
+             } else if (angle > 30 * 0.01745) {
+                 action = 5;
+             } else if (angle > 20 * 0.01745) {
+                 action = 3.5;
+             } else if (angle > 10 * 0.01745) {
+                 action = 2;
+             } else if(angle >5*0.01745){
+                 action = 1;
+             } else if(angle >2*0.01745){
+                 action = 0.75;
+             } else {
+                 action = 0.5;
+             }
+         } else if (angle < 0) {
+             if (angle < -65 * 0.01745) {
+                 action = -7;
+             } else if (angle < -60 * 0.01745) {
+                 action = -6;
+             } else if (angle < -50 * 0.01745) {
+                 action = -5;
+             } else if (angle < -30 * 0.01745) {
+                 action = -4;
+             } else if (angle < -20 * 0.01745) {
+                 action = -3;
+             } else if (angle < -10 * 0.01745) {
+                 action = -2;
+             } else if(angle <-5*0.01745){
+                 action = -1;
+             } else if(angle <-2*0.01745){
+                 action = -.75;
+             } else {
+                 action = -0.5;
+             } 
+          } else {
+              action = 0;
+          }
+          if (angleDot > 0) {
+              if (angleDot > 65 * 0.01745) {
+                  action += 5;
+              } else if (angleDot > 60 * 0.01745) {
+                  action += 4;
+              } else if (angleDot > 50 * 0.01745) {
+                  action += 3;
+              } else if (angleDot > 30 * 0.01745) {
+                  action += 3;
+              } else if (angleDot > 20 * 0.01745) {
+                  action += 2;
+              } else if (angleDot > 10 * 0.01745) {
+                  action += 1;
+              } else if(angleDot > 5*0.01745){
+                  action += .6;
+              } else if(angleDot > 2*0.01745){
+                  action += 0.5;
+              } else {
+                  action += 0.2;
+              } 
+          } else if (angleDot < 0) {
+              if (angleDot < -65 * 0.01745) {
+                  action += -9;
+              } else if (angleDot < -60 * 0.01745) {
+                  action += -3;
+              } else if (angleDot < -50 * 0.01745) {
+                  action += -3;
+              } else if (angleDot < -30 * 0.01745) {
+                  action += -3;
+              } else if (angleDot < -20 * 0.01745) {
+                  action += -2;
+              } else if (angleDot < -10 * 0.01745) {
+                  action += -1;
+              } else if(angleDot <-5*0.01745){
+                  action += -.5;
+              } else if(angleDot <-2*0.01745){
+                  action += -0.25;
+              } else {
+                  action += -0.1;
+              } 
+          } else {
+             action = 0;
+         }
+         //Michael: Probably should do preventative measures with the velocity
+         /*if (posDot < 0) {
+             if (posDot < -0.5) {
+                 action += .5;
+             }
+         } else if (posDot > 0) {
+             if (posDot > 0.5) {
+                 action += -.5;
+             }
+        }
+        int target_pos = 2;
+        int start_pos = -2;
+        System.out.println("***pos: " + pos);
+        if ( pos < (target_pos+start_pos)/2 -.25){//first_iteration ) {
+            action -= (target_pos);
+            System.out.println("neg");
+            first_iteration = false;
+        }
 
+        if ( pos < target_pos ) 
+            if (angleDot > -2 * 0.01745 )
+                action += 1;
+        if ( pos >= target_pos-1 && hit_pos == false){
+            hit_pos = true;
+            action += target_pos;
+        }
+        if ( posDot > 0 && angle < 0 && hit_pos){
+            System.out.println("**hit here");
+            action = -3;            
+        }
+        if (posDot > 0 && Math.abs(angle) <= 0.02 && pos > target_pos-.5) {
+            action *= .66;
+            //action = action / 2;
+            //System.out.println("SLOWDOWN ACTIVATED");
+        }
+        if (pos >= target_pos-.3) { // begin stabilzing
+            System.out.println("reached 2");
+            System.out.println("ANGLE IS " + angle);
+            System.out.println("ANGLE DOT IS " + angleDot);
+            System.out.println("POS DOT IS " + posDot);
+            action = 0;
+            if (angle > 0) {
+                if (angle > .1/*20 * 0.01745) {
+                    action = 1.5;
+                } else if (angle > .07) {
+                    action = 1;
+                } else if(angle >.05){
+                    action = .76;
+                } else if(angle >.04){
+                    action = .5;
+                } else if(angle > .03){
+                    action = 0.4;
+                } else if(angle > .02){
+                    action = 0.3;
+                }
+                else if(angle > .01){
+                    action = 0.2;
+                }
+                else {
+                    action = 0.1;
+                }
+            } else if (angle < 0) {
+                if (angle < -.1) {
+                    action = -1.5;
+                } else if (angle < -.07) {
+                    action = -1;
+                } else if(angle <-.06){
+                    action = -.75;
+                } else if(angle <-.05){
+                    action = -.5;
+                } else if (angle <-.04){
+                    action = -.4;
+                } else if (angle <-.03){
+                    action = -.3;
+                } else if (angle <-.02){
+                    action = -.2;
+                }  
+                else {
+                    action = -0.1;
+                } 
+             } else {
+                 action = 0;
+             }
+             if (angleDot > 0) {
+                 if (angleDot > 65 * 0.01745) {
+                     action += 1;
+                 } else if (angleDot > 60 * 0.01745) {
+                     action += .9;
+                 } else if (angleDot > 50 * 0.01745) {
+                     action += .8;
+                 } else if (angleDot > 30 * 0.01745) {
+                     action += .7;
+                 } else if (angleDot > 20 * 0.01745) {
+                     action += .5;
+                 } else if (angleDot > 10 * 0.01745) {
+                     action += .4;
+                 } else if(angleDot > 5*0.01745){
+                     action += .3;
+                 } else if(angleDot > 2*0.01745){
+                     action += .2;
+                 } else {
+                     action += .1;
+                 } 
+             } else if (angleDot < 0) {
+                 if (angleDot < -65 * 0.01745) {
+                     action += -5;
+                 } else if (angleDot < -60 * 0.01745) {
+                     action += -4;
+                 } else if (angleDot < -50 * 0.01745) {
+                     action += -3;
+                 } else if (angleDot < -30 * 0.01745) {
+                     action += -.7;
+                 } else if (angleDot < -20 * 0.01745) {
+                     action += -.5;
+                 } else if (angleDot < -10 * 0.01745) {
+                     action += -.4;
+                 } else if(angleDot <-5*0.01745){
+                     action += -.3;
+                 } else if(angleDot <-2*0.01745){
+                     action += -0.2;
+                 } else {
+                     action += -0.1;
+                 } 
+             } 
+            
+            if (posDot > 0) {
+                if (posDot > 1) {
+                    action += -1;
+                }
+                else if (posDot > .6) {
+                    action += -.5;
+                }
+                else if (posDot > .3) {
+                    action += -.2;
+                }
+            }
+        }
 
+        /*if ( hit_pos ) {
+            if ( angle < 0 )
+                hit_pos = false;
+            action += 5;
+        }*/
+        //else if ( pos > targetPos )
+            //action -= 1;
+        /*if (pos < 0 && angle < 10 * 0.01745)
+            action -= 6;
+        else if (pos == 2) {
+            action = 0;
+        }
+        else if (pos >= 1 && pos < 2) {
+            action += 3.5;
+        } else if (pos > 2) {
+            //action -= 5;
+            action = 0;
+        }  
+
+        return action;
+     
+    }*/
 
     /**
      * This method sends the Double message on the object output stream.

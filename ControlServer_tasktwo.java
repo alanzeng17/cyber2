@@ -36,7 +36,7 @@ public class ControlServer {
  */
 class PoleServer_handler implements Runnable {
     // Set the number of poles
-    private static final int NUM_POLES = 2;
+    private static final int NUM_POLES = 1;
 
     static ServerSocket providerSocket;
     Socket connection = null;
@@ -45,13 +45,12 @@ class PoleServer_handler implements Runnable {
     String message = "abc";
     static Socket clientSocket;
     Thread t;
-    boolean hit;
     int start_pos = -2;
     boolean alt = false;
     boolean stopped = false;
     boolean once = false;
     int count = 0;
-    int ts = 0;
+    int ts = 2;
     double follow = 0;
 
     /**
@@ -162,48 +161,12 @@ class PoleServer_handler implements Runnable {
     }
 
     double calculate_action(double angle, double angleDot, double pos, double posDot, double target_pos) {
-        /*double action = 0;
-        double a = .5;
-        double b = .75;
-      double c = 0;
-        double d = .25;
-      double angleCheck;
-      action = (angle*a+angleDot*b+pos*c+posDot*d)*5;
-      //double angleCheck = 0.01745;
-      // if(hit || Math.abs(pos - finalPos) < .05) {
-      //   angleCheck = 7 * 0.01745;
-      //   System.out.print("HELLO");
-      //   hit = true;
-      // }
-      // else
-      //   angleCheck = 0.01745;
-      if(Math.abs(finalPos - pos) < 0.2)
-          hit = true;  
-      if (Math.abs(angle) < 1 * 0.01745) {
-        if(pos < finalPos && posDot > 0) {
-          if(hit)
-            action = 0;
-          else
-            action = -0.015;
-        }
-        if(pos > finalPos && posDot < 0) {
-          if(hit)
-            action = 0;
-          else
-            action = 0.015;
-        }
-      }
-
-      return action;*/
         double action = 0;
         //double target_pos = 2; // change this for cart 2
         double mid = (start_pos + target_pos)/4;
         double dist = target_pos - start_pos;
         if (pos < mid) {
             action -= 0.09;
-        }
-        if (target_pos != ts && target_pos - pos < 0.8) {
-            action -= .1;
         }
         if (pos >= start_pos + (dist * .97)){
             System.out.println("Stablization activate");
